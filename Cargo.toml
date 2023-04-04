@@ -1,5 +1,5 @@
 [package]
-name = "DTP"
+name = "dtp"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,4 +8,5 @@ edition = "2021"
 [dependencies]
 axum = "0.6.12"
 http-body-util = "0.1.0-rc.2"
+itertools = "0.10.5"
 tokio = { version = "1.27.0", features = ["full"] }
