@@ -26,7 +26,7 @@ async fn path_handler(directory: &Dir<'static>, Path(path): Path<String>) -> imp
         let path: String = path.trim_start_matches('/').to_owned();
         if path.is_empty() {
             String::from("index.html")
-        } else if path.contains(".") {
+        } else if path.contains('.') {
             path
         } else {
             path + ".html"
