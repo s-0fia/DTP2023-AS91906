@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css"/>
+</head>
+<body>
+    <div id="firebaseui-auth-container"></div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"; 
+        import { getAuth } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js"
+
+        // The web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBAaDil2YAcz0O6obwtGMDzPRVA1i-9xyo",
+            authDomain: "dependencies-66ab7.firebaseapp.com",
+            projectId: "dependencies-66ab7",
+            storageBucket: "dependencies-66ab7.appspot.com",
+            messagingSenderId: "234891587925",
+            appId: "1:234891587925:web:ce4af0da4e4f6b39ddffdc",
+            measurementId: "G-Y421ZEFVZ1"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // 1) Create a new firebaseui.auth instance stored to our local variable ui
+        const ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+        // 2) These are our configurations.
+        const uiConfig = {
+            callbacks: {
+                signInSuccessWithAuthResult(authResult, redirectUrl) {
+                    return true;
+                },
+                // uiShown() {
+                //     document.getElementById("firebaseui-auth-container").style.display = "none";
+                // },
+            },
+            signInFlow: "popup",
+            signInSuccessUrl: "signedIn",
+            signInOptions: [
+                // firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                // Additional login options should be listed here
+                // once they are enabled within the console.
+            ],
+        };
+
+        // 3) Call the 'start' method on our ui class
+        // including our configuration options.
+        ui.start("#firebaseui-auth-container", uiConfig);
+    </script>
+</body>
+</html>
