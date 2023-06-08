@@ -4,4 +4,4 @@ This app is designed to help students effectively communicate needs/ideas/etc to
 
 ## Build Dependencies
 1. [Rust](https://www.rust-lang.org/tools/install)
-2. [PostgressDB](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+2. [Firebase](https://firebase.google.com/)
