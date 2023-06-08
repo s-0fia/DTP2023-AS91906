@@ -5,14 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home page</title>
+    
+    <!-- Google Fonts integration -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+
+    <script src="static/js/cookies.js"></script>
+    <script>
+        // If the user has not accepted cookies yet, then redirect them to the welcome page!
+        if (!document.cookie.includes("cookiesAccepted")) {
+            window.location.href = "/welcome";
+        }
+        // If the the user is not signed in then redirect them to the signin page!
+        if (!isSignedIn()) {
+            window.location.href = "/signin";
+        }
+    </script>
+    <script src="/static/js/dashboard.js" defer></script>
 </head>
 <body>
-    <h1>Hello, world!</h1>
-    <a href="./signin" style="position: absolute;right: 0;top: 0;">
-        <button>Sign in</button>
-    </a>
-    <!-- <video height="720" width="406" autoplay controls>
-        <source src="static/videoplayback.mp4" type="video/mp4">
-    </video> -->
+    <h1 id="welcomeMessage">Hello, world!</h1>
+    <button onclick="signOutClick();" id="signOut">Sign out</button>
 </body>
 </html>

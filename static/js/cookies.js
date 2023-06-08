@@ -1,5 +1,5 @@
 // Given userData, it sets the values in a cookie so that the site can access it later
-// takes userData: { email: String, id: String, name: String, pictureUrl: String }
+// takes userData: { email: String, id: String, firstName: String, lastName: String, pictureUrl: String }
 function setSignInCookie(userData) {
     // Set the cookie expiry to 6 hours (21600000 milliseconds) from now, which provides easy of use,
     // but ensures that the user will not stay signed in for too long
@@ -7,24 +7,27 @@ function setSignInCookie(userData) {
     date.setTime(date.getTime() + 21600000);
     let expiry = date.toUTCString();
 
-    document.cookie = `email=${userData.email}; expires=${expiry}; path=/;`;
     document.cookie = `id=${userData.id}; expires=${expiry}; path=/;`;
-    document.cookie = `name=${userData.name}; expires=${expiry}; path=/;`;
+    document.cookie = `email=${userData.email}; expires=${expiry}; path=/;`;
+    document.cookie = `firstName=${userData.firstName}; expires=${expiry}; path=/;`;
+    document.cookie = `lastName=${userData.lastName}; expires=${expiry}; path=/;`;
     document.cookie = `pictureUrl=${userData.pictureUrl}; expires=${expiry}; path=/;`;
 }
 
 // Gets userData from a cookie in a usable format, or returns null if the user isn't signed in
-// returns userData: { email: String, id: String, name: String, pictureUrl: String };
+// returns userData: { email: String, id: String, firstName: String, lastName: String, pictureUrl: String };
 function getSignInCookie() {
     if (!cookieIsValid()) {
         return null;
     }
     let parts = document.cookie.split(";");
+    var data = (str) => str.split("=")[1];
     let userData = {
-        email: parts[0].substring(6),
-        id: parts[1].substring(4),
-        name: parts[2].substring(6),
-        pictureUrl: parts[3].substring(12)
+        email: data(parts[1]), // start at 1 as 0 is "cookiesAccepted"
+        id: data(parts[2]),
+        firstName: data(parts[3]),
+        lastName: data(parts[4]),
+        pictureUrl: data(parts[5])
     }
 
     return userData;
@@ -35,7 +38,8 @@ function getSignInCookie() {
 function cookieIsValid() {
     return document.cookie.includes("email")
         && document.cookie.includes("id")
-        && document.cookie.includes("name")
+        && document.cookie.includes("firstName")
+        && document.cookie.includes("lastName")
         && document.cookie.includes("pictureUrl");
 }
 

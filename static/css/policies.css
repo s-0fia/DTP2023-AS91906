@@ -1,0 +1,11 @@
+body {
+    background-color: #EAECEE;
+    color: #17202A;
+    font-family: 'Roboto', sans-serif;
+    padding: 4vh 4vw;
+}
+
+a {
+    color: #154360;
+    font-weight: 600;
+}
