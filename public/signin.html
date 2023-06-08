@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign in</title>
+    <script src="static/cookies.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
@@ -34,28 +35,29 @@
         // 1) Create a new firebaseui.auth instance stored to our local variable ui
         const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
-        // 2) These are our configurations.
+        // Set up the UI config and callbacks.
         const uiConfig = {
             callbacks: {
                 signInSuccessWithAuthResult(authResult, redirectUrl) {
+                    let userData = {
+                        email: authResult.additionalUserInfo.profile.email,
+                        id: authResult.additionalUserInfo.profile.id,
+                        name: authResult.additionalUserInfo.profile.name,
+                        pictureUrl: authResult.additionalUserInfo.profile.picture
+                    };
+                    setSignInCookie(userData);
                     return true;
                 },
-                // uiShown() {
-                //     document.getElementById("firebaseui-auth-container").style.display = "none";
-                // },
             },
             signInFlow: "popup",
-            signInSuccessUrl: "dashboard",
+            signInSuccessUrl: "/",
             signInOptions: [
                 firebase.auth.EmailAuthProvider.PROVIDER_ID,
                 firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                // Additional login options should be listed here
-                // once they are enabled within the console.
             ],
         };
 
-        // 3) Call the 'start' method on our ui class
-        // including our configuration options.
+        // Call the 'start' method on our ui class with the configuration options.
         ui.start("#firebaseui-auth-container", uiConfig);
     </script>
 </body>
