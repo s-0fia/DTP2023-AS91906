@@ -85,7 +85,7 @@ pub fn print_info(ip_addr: &[u8; 4], port: &u16) {
     let access_port = if port != &80 && port != &443 {
         format!(":{}", port) // Set it to a colon followed by the port
     } else {
-        String::from("") // Else set it to none, as those ports are unecessary to browsers
+        String::from("") // Else set it to none, as those ports are unnecessary to browsers
     };
 
     // Give the website url dictated by the strings above
