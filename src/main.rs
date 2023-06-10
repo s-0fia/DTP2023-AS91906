@@ -1,62 +1,29 @@
-use axum::{routing::get, Router};
-// use axum_server::tls_rustls::RustlsConfig;
-use itertools::Itertools;
-use std::{env, net::SocketAddr};
-mod shutdown;
-mod handlers;
+mod data;
+mod http;
 
-// Initialise const values  for server stuff.
-const SERV_PORT: u16 = 80;
-// const IP_ADDR: [u8; 4] = [192, 168, 235, 72];
-const LOCAL_HOST: [u8; 4] = [127, 0, 0, 1];
+use crate::{data::database, http::{ip_and_port}};
 
+// The asynchronous main function
 #[tokio::main]
-async fn main() {
-    let args: Vec<String> = env::args().collect();
-    let ip_addr: [u8; 4] = if args.len() >= 2 {
-        let numbers: Vec<&str> = args[1].split('.').collect();
-        if numbers.len() == 4 {
-            let mut parsed: Vec<u8> = vec![];
-            for num in numbers {
-                let n = num.parse::<u8>();
-                if n.is_ok() {
-                    parsed.push(n.unwrap());
-                }
-            }
-            if parsed.len() == 4 {
-                [parsed[0], parsed[1], parsed[2], parsed[3]]
-            } else {
-                LOCAL_HOST
-            }
-        }
-        else {
-            LOCAL_HOST
-        }
-    } else {
-        LOCAL_HOST
-    };
+async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    // Puts all environment variables found in the .env into the environment variables
+    dotenv::dotenv().ok();
 
-    if ip_addr == LOCAL_HOST {
-        println!("No (valid) ip address given. Using local host by default!");
-        println!("If you wish to use an ip address other than local host, run the exe followed by the ip address. Ie: {} 192.168.x.x", args[0]);
-    }
+    // Create an instance of the database, and unwrap the result (panic if there is an error)
+    let _db = database::create_firestore_instance().await?;
+    
+    // Get the ip and port defined by the user or default to ip 127.0.0.1 and/or port 80
+    let (ip_addr, port) = ip_and_port::get_or_default();
+    
+    // Print information about: the ip and port, website, and environment variables to the user
+    ip_and_port::print_info(&ip_addr, &port);
+    
+    // Spawn a tokio thread to handle the tcp server
+    // tokio::spawn(async move {
+    // });
 
-    // Build the routes for the app, handling the static and public directories with an exception for / going to "index.html".
-    let app = Router::new()
-        .route("/", get(handlers::home_path))
-        .route("/*path", get(handlers::public_path))
-        .route("/static/*path", get(handlers::static_path));
+    // Create and host the server (found in /http/mod.rs)
+    http::create_server(ip_addr, port).await;
 
-    // Print the ip and port the server is hosted on.
-    println!("Server hosted statically on {}:{} ", ip_addr.iter().format("."), SERV_PORT);
-    let access_url = if ip_addr == LOCAL_HOST { String::from("localhost") } else { ip_addr.iter().format(".").to_string() };
-    let access_port = if SERV_PORT != 80 { format!(":{}", SERV_PORT) } else { String::from("") };
-    println!("Access the GUI by going to {}{}", access_url, access_port);
-
-    // Bind the server with the routes and have a graceful shutdown signal.
-    axum::Server::bind(&SocketAddr::from((ip_addr, SERV_PORT)))
-        .serve(app.into_make_service())
-        .with_graceful_shutdown(shutdown::shutdown_signal())
-        .await
-        .unwrap();
+    Ok(())
 }

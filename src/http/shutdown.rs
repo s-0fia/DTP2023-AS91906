@@ -18,7 +18,7 @@ pub async fn shutdown_signal() {
             .await;
     };
 
-    // Implement no handler for other type systems (like IOS, andriod, etc.).
+    // If the system isn't unix then add a "default" for the unix terminate flag
     #[cfg(not(unix))]
     let terminate = std::future::pending::<()>();
 
