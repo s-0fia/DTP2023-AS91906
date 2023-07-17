@@ -14,3 +14,12 @@ function signOutClick() {
     // redirect to the signin page
     window.location.href = "./welcome";
 }
+
+function httpQuery(field)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", `/?uid=${user.id}&q=${field}`, false); // false for synchronous request
+    xmlHttp.send(null);
+    console.log(xmlHttp.responseText);
+    return xmlHttp.responseText;
+}

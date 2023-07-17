@@ -50,14 +50,14 @@
             callbacks: {
                 signInSuccessWithAuthResult(authResult, redirectUrl) {
                     let profile = authResult.additionalUserInfo.profile;
-                    let userData = {
-                        email: profile.email,
-                        id: profile.id,
-                        firstName: profile.given_name,
-                        lastName: profile.family_name,
-                        pictureUrl: profile.picture
-                    };
-                    setSignInCookie(userData);
+                    setSignInCookie(
+                        new UserData(
+                            profile.email,
+                            profile.id,
+                            profile.given_name,
+                            profile.picture
+                        )
+                    );
                     return true;
                 },
             },
