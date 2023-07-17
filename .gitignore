@@ -2,4 +2,9 @@
 .env
 edsynca-13c3b712bb4b.json
 logo.png
-.vscode/settings.json
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
