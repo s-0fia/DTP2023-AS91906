@@ -1,7 +1,7 @@
 mod data;
 mod http;
 
-use crate::{data::database::{self, *}, http::{ip_and_port}};
+use crate::{data::database, http::ip_and_port};
 
 // The asynchronous main function
 #[tokio::main]

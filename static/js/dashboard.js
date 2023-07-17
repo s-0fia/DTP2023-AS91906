@@ -23,3 +23,9 @@ function httpQuery(field)
     console.log(xmlHttp.responseText);
     return xmlHttp.responseText;
 }
+
+function loadClasses() {
+    let response = httpQuery("get_classes");
+}
+
+loadClasses();

@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use crate::data::*;
-use firestore::{FirestoreDb, errors::FirestoreError, FirestoreDbOptions, path, struct_path, paths};
+use firestore::{FirestoreDb, errors::FirestoreError, FirestoreDbOptions, struct_path, paths};
 use gcloud_sdk::{GCP_DEFAULT_SCOPES, TokenSourceType};
 use std::env::var;
 use async_mutex::Mutex;

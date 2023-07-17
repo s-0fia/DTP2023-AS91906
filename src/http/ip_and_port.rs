@@ -1,4 +1,4 @@
-use std::{env::{var, VarError}};
+use std::env::{var, VarError};
 use itertools::Itertools;
 
 // Set the (constant) default sever port of 80

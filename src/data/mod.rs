@@ -27,10 +27,29 @@ pub struct Classroom {
     pub name: String, // Its plain name, ie. 03DTP-2023
     pub users: Vec<String>, // The list of users UID that are subscribed to the class
     pub teachers_uids: Vec<String>, // The teachers' UIDs of the class
+    pub teacher_name: String, // The name of the primary teacher(s) who owns/runs the class
+}
+
+// Implement the structure of the ResponseClassroom, which is used by the frontend
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct ResponseClassroom {
+    pub uid: String, // The Unique IDentifier of the classroom
+    pub name: String, // Its plain name, ie. 03DTP-2023
+    pub teachers_uids: Vec<String>, // The teachers' UIDs of the class
+    pub teacher_name: String, // The name of the primary teacher(s) who own/run the class
 }
 
 impl Classroom {
     pub fn create_uid() -> String {
         Uuid::new_v4().to_string()
+    }
+
+    pub fn to_response(&self) -> ResponseClassroom {
+        ResponseClassroom {
+            uid: self.uid.clone(),
+            name: self.name.clone(),
+            teachers_uids: self.teachers_uids.clone(),
+            teacher_name: self.teacher_name.clone(),
+        }
     }
 }
