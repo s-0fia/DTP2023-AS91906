@@ -1,6 +1,8 @@
 pub mod database;
 
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
+
 
 // Implement the enumaration of the Permissions of the user which determines what they can do
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -25,4 +27,10 @@ pub struct Classroom {
     pub name: String, // Its plain name, ie. 03DTP-2023
     pub users: Vec<String>, // The list of users UID that are subscribed to the class
     pub teachers_uids: Vec<String>, // The teachers' UIDs of the class
+}
+
+impl Classroom {
+    pub fn create_uid() -> String {
+        Uuid::new_v4().to_string()
+    }
 }
