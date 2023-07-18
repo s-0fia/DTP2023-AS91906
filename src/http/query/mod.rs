@@ -12,14 +12,17 @@ pub struct Req {
 pub async fn get_response(q: Option<Query<Req>>) -> Option<impl IntoResponse> {
     if let Some(query) = q {
         
-        let user_uid: &str = query.uid.as_ref();
+        let uid: &str = query.uid.as_ref();
         Some(match query.q.as_ref() {
             "class_uid" => {
-                class_uid::get(user_uid).await.into_response()
+                class_uid::get(uid).await.into_response()
             },
             "get_classes" => {
-                classes::get(user_uid).await.into_response()
+                classes::get(uid).await.into_response()
             },
+            "get_class" => {
+                classes::get_one(uid).await.into_response()
+            }
             _ => {
                 "400".into_response()
             },

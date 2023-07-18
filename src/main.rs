@@ -1,6 +1,8 @@
 mod data;
 mod http;
 
+use data::{Classroom, database::ExtendFirestoreDb};
+
 use crate::{data::database, http::ip_and_port};
 
 // The asynchronous main function
@@ -9,10 +11,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     // Puts all environment variables found in the .env into the environment variables
     dotenv::dotenv().ok();
 
+    println!("Setting up the database.");
     // Create an instance of the database, and unwrap the result (panic if there is an error)
     *database::INSTANCE.lock().await = Some(database::create_firestore_instance().await?);
     
-    // let new_user_uid = String::from("105111092662728170806");
+    let new_user_uid = String::from("105111092662728170806");
     // // Add an example student into the database
     // {
     //     let instance = database::INSTANCE.lock().await;
@@ -28,22 +31,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     //     db.add_user(new_user).await.unwrap();
     // }
 
-    // let new_class_uid = data::Classroom::create_uid();
+    // let new_class_uid = Classroom::create_uid();
 
     // // Add an example classroom into the database
     // {
+    //     println!("Seting up new Classroom...");
     //     let instance = database::INSTANCE.lock().await;
-    //     let new_classroom = data::Classroom {
+    //     let new_classroom = Classroom {
     //         uid: new_class_uid.clone(),
-    //         name: String::from("Example-03EXC"),
+    //         name: String::from("Other-03OTH"),
     //         users: vec!(),
-    //         teachers_uids: vec!(),
+    //         teachers_uids: vec![String::from("100392388378034835371")],
+    //         teacher_name: String::from("Jane Doe"),
     //     };
 
     //     let db = instance.as_ref().unwrap();
 
+    //     println!("Adding new Classroom...");
     //     db.add_class(new_classroom).await.unwrap();
 
+    //     println!("Assigning user and class to each other...");
     //     db.assign_class_and_user(&new_user_uid, &new_class_uid).await.unwrap();
     // }
     

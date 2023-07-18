@@ -52,4 +52,12 @@ impl Classroom {
             teacher_name: self.teacher_name.clone(),
         }
     }
+
+    pub fn option_to_response(class: Option<Classroom>) -> Option<ResponseClassroom> {
+        if let Some(class) = class {
+            Some(class.to_response())
+        } else {
+            None
+        }
+    }
 }

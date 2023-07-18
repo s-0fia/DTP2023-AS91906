@@ -4,12 +4,36 @@ use axum::{
     body,
     extract::{Path, Query},
 };
+use mime_guess::mime::{self, HTML};
 use crate::http::query::*;
 use include_dir::{include_dir, Dir};
 
 // The directories to include into the binary's compilation (compiled into the .exe)
 static STATIC_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/static");
 static PUBLIC_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/public");
+static CLASS_DIR:  Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/class");
+
+pub async fn class(Path(path): Path<String>) -> impl IntoResponse {
+    match CLASS_DIR.get_file("index.html") {
+        None => panic!("No index.html found in /class!"),
+        Some(file) => Response::builder()
+            .status(
+                StatusCode::OK
+            ).header(
+                header::CONTENT_TYPE,
+                    // Use the guessed file type to serve it as that type
+                HeaderValue::from_str(mime::TEXT_HTML.as_ref())
+                    .unwrap(),
+            ).body(
+                body::boxed(
+                    body::Full::from(
+                        file.contents()
+                    )
+                )
+            ).unwrap(),
+    }
+    // (String::from("200 ") + &path.to_owned()).into_response()
+}
 
 // The handler for static paths which is an export for path_handler with the STATIC_DIR
 pub async fn static_path(path: Path<String>) -> impl IntoResponse {

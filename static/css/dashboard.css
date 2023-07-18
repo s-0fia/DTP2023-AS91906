@@ -5,3 +5,30 @@
     margin: 0.5rem 0.5rem 0 0;
     padding: 0.5rem 1rem;
 }
+
+#classes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 25rem);;
+    padding: 0 1vw;
+}
+
+.class-child {
+    width: 20rem;
+    aspect-ratio: 4/3;
+    text-align: center;
+    padding: 1rem;
+    border: 0.125rem solid var(--border-c);
+    border-radius: 2%;
+    background-image: linear-gradient(to bottom, var(--highlight) 50%, var(--border-c) 50%, var(--border-c) 51%, var(--white) 52%);
+    cursor: pointer;
+    margin: 1rem;
+}
+
+.class-child h1 {
+    color: var(--white);
+    height: 50%;
+    padding: 0.5rem;
+}
+
+/* .class-child h2 {
+} */

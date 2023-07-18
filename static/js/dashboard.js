@@ -15,17 +15,68 @@ function signOutClick() {
     window.location.href = "./welcome";
 }
 
-function httpQuery(field)
+async function httpQuery(field)
 {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", `/?uid=${user.id}&q=${field}`, false); // false for synchronous request
+    await xmlHttp.open("GET", `/?uid=${user.id}&q=${field}`, true); // false for synchronous request
     xmlHttp.send(null);
-    console.log(xmlHttp.responseText);
     return xmlHttp.responseText;
 }
 
-function loadClasses() {
-    let response = httpQuery("get_classes");
+class Classroom {
+    constructor(res) {
+        this.UID = res.uid;
+        this.name = res.name;
+        this.teacherUIDs = res.teachers_uids;
+        this.teacherName = res.teacher_name;
+    }
 }
 
-loadClasses();
+function classroomInnerToOuterArray(resArr) {
+    let outArr = Array();
+
+    for (let i = 0; i < resArr.length; i++)
+        outArr.push(new Classroom(resArr[i]));
+
+    return outArr;
+}
+
+function classClick(classUID) {
+    showLoader();
+    setTimeout(() => {
+        window.location.href = `/c/${classUID}`;
+    }, 500);
+}
+
+async function loadClasses() {
+    let response = classroomInnerToOuterArray(
+        JSON.parse(
+            await httpQuery("get_classes")
+        )
+    );
+
+    for (let i = 0; i < response.length; i++) {
+        let classroom = response[i];
+        let fragment = create(
+            `<div id="${classroom.UID}" class="class-child" onclick="classClick('${classroom.UID}');">` +
+                `<h1><a>${classroom.name}</a></h1>` +
+                `<h2>Teacher: ${classroom.teacherName}</h2>` +
+            `</div>`
+        );
+
+        document.getElementById('classes')
+            .appendChild(fragment);
+    }
+}
+
+const create = (htmlStr) => {
+    var frag = document.createDocumentFragment(),
+        temp = document.createElement('div');
+    temp.innerHTML = htmlStr;
+    while (temp.firstChild) {
+        frag.appendChild(temp.firstChild);
+    }
+    return frag;
+}
+
+await loadClasses();

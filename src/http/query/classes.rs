@@ -23,3 +23,23 @@ pub async fn get(uid: &str) -> impl IntoResponse  {
     }
     serde_json::to_string(&classes).unwrap().into_response()
 }
+
+pub async fn get_one(uid: &str) -> impl IntoResponse  {
+    // Get the lock on the database to make a query
+    let instance = database::INSTANCE.lock().await;
+    
+    let class: Option<ResponseClassroom> = if let Some(db) = instance.as_ref() {
+        Classroom::option_to_response(
+            db.find_class_by_id(uid)
+                .await
+        )
+    } else {
+        None
+    };
+
+    if let Some(class) = class {
+        serde_json::to_string(&class).unwrap().into_response()
+    } else {
+        "400".into_response()
+    }
+}

@@ -1,11 +1,17 @@
+:root {
+    --white: #F8F9F9;
+    --text-c: #17202A;
+    --link-c: #154360;
+}
+
 body {
-    background-color: #EAECEE;
-    color: #17202A;
+    background-color: var(--white);
+    color: var(--text-c);
     font-family: 'Roboto', sans-serif;
     padding: 4vh 4vw;
 }
 
 a {
-    color: #154360;
+    color: var(--text-c);
     font-weight: 600;
 }
