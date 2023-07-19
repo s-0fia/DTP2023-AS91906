@@ -15,10 +15,10 @@ function signOutClick() {
     window.location.href = "./welcome";
 }
 
-async function httpQuery(field)
+function httpQuery(field)
 {
     var xmlHttp = new XMLHttpRequest();
-    await xmlHttp.open("GET", `/?uid=${user.id}&q=${field}`, true); // false for synchronous request
+    xmlHttp.open("GET", `/?uid=${user.id}&q=${field}`, false); // false for synchronous request
     xmlHttp.send(null);
     return xmlHttp.responseText;
 }
@@ -51,7 +51,7 @@ function classClick(classUID) {
 async function loadClasses() {
     let response = classroomInnerToOuterArray(
         JSON.parse(
-            await httpQuery("get_classes")
+            httpQuery("get_classes")
         )
     );
 
@@ -79,4 +79,4 @@ const create = (htmlStr) => {
     return frag;
 }
 
-await loadClasses();
+loadClasses();
