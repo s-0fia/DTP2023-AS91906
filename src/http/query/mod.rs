@@ -1,12 +1,13 @@
 mod class_uid;
 mod classes;
+mod perms;
 use axum::{response::IntoResponse, extract::Query};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct Req {
-    uid: String,
-    q: String,
+    pub uid: String,
+    pub q: String,
 }
 
 pub async fn get_response(q: Option<Query<Req>>) -> Option<impl IntoResponse> {
@@ -14,18 +15,11 @@ pub async fn get_response(q: Option<Query<Req>>) -> Option<impl IntoResponse> {
         
         let uid: &str = query.uid.as_ref();
         Some(match query.q.as_ref() {
-            "class_uid" => {
-                class_uid::get(uid).await.into_response()
-            },
-            "get_classes" => {
-                classes::get(uid).await.into_response()
-            },
-            "get_class" => {
-                classes::get_one(uid).await.into_response()
-            }
-            _ => {
-                "400".into_response()
-            },
+            "class_uid" => class_uid::get(uid).await.into_response(),
+            "get_classes" => classes::get(uid).await.into_response(),
+            "get_class" => classes::get_one(uid).await.into_response(),
+            "is_teacher" => perms::is_teacher(uid).await.into_response(),
+            _ => "400".into_response(),
         })
     } else {
         None

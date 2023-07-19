@@ -5,7 +5,7 @@ use uuid::Uuid;
 
 
 // Implement the enumaration of the Permissions of the user which determines what they can do
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 pub enum Permissions {
     Admin = -1, // The values that these "map" to, where admin is -1
     Student = 0, // Student is 0
