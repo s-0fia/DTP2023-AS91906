@@ -15,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     // Create an instance of the database, and unwrap the result (panic if there is an error)
     *database::INSTANCE.lock().await = Some(database::create_firestore_instance().await?);
     
-    let new_user_uid = String::from("105111092662728170806");
+    // let new_user_uid = String::from("105111092662728170806");
     // // Add an example student into the database
     // {
     //     let instance = database::INSTANCE.lock().await;
