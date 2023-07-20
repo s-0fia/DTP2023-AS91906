@@ -43,3 +43,7 @@ pub async fn get_one(uid: &str) -> impl IntoResponse  {
         "400".into_response()
     }
 }
+
+pub async fn new(uid: &str, q: String) -> impl IntoResponse {
+
+}
