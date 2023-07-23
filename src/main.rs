@@ -15,6 +15,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     // Create an instance of the database, and unwrap the result (panic if there is an error)
     *database::INSTANCE.lock().await = Some(database::create_firestore_instance().await?);
     
+
+    let fields: [&str; 3] = ["03TEST","Test Teacher","[\"100392388378034835371\"]"];
+
+    let teachers_uids: Vec<String> = 
+        if let Ok(uids) = serde_json::from_str(fields[2]) {
+            uids
+        } else {
+            vec!()
+        };
+
+    let new_class = Classroom {
+        uid: Classroom::create_uid(),
+        name: fields[0].to_string(),
+        users: vec!(),
+        teacher_name: fields[1].to_string(),
+        teachers_uids,
+    };
+
+    dbg!(new_class);
+
     // let new_user_uid = String::from("105111092662728170806");
     // // Add an example student into the database
     // {

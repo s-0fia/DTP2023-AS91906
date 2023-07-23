@@ -1,3 +1,5 @@
+use std::default;
+
 use axum::response::IntoResponse;
 use crate::data::{*, database::ExtendFirestoreDb};
 
@@ -45,5 +47,48 @@ pub async fn get_one(uid: &str) -> impl IntoResponse  {
 }
 
 pub async fn new(uid: &str, q: String) -> impl IntoResponse {
+    let instance = database::INSTANCE.lock().await;
 
+    if let Some(db) = instance.as_ref() {
+        if let Some(user) = db.find_user_by_id(uid).await {
+            match user.access {
+                Permissions::Admin => {},
+                Permissions::Teacher => {},
+                _ => {
+                    return "403".into_response();
+                }
+            }
+        }
+
+        let fields = serde_json::from_str::<[&str; 3]>(&q);
+        
+        let fields = if fields.is_err() {
+            return "400".into_response();
+        } else {
+            fields.unwrap()
+        };
+
+        let teachers_uids: Vec<String> = 
+            if let Ok(uids) = serde_json::from_str(fields[2]) {
+                uids
+            } else {
+                vec!()
+            };
+
+        let new_class = Classroom {
+            uid: Classroom::create_uid(),
+            name: fields[0].to_string(),
+            users: vec!(),
+            teacher_name: fields[1].to_string(),
+            teachers_uids,
+        };
+
+        if db.add_class(new_class).await.is_ok() {
+            "200".into_response()
+        } else {
+            "400".into_response()
+        }
+    } else {
+        "500".into_response()
+    }
 }
