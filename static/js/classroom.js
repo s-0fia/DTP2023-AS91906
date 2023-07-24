@@ -13,15 +13,7 @@ const titleTag = document.getElementsByTagName('title')[0];
 
 const classuid = window.location.href.split('/c/')[1].replace('/', '');
 
-function httpQuery(field)
-{
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", `/?uid=${classuid}&q=${field}`, false); // false for synchronous request
-    xmlHttp.send(null);
-    return xmlHttp.responseText;
-}
-
-let classroom = new Classroom(JSON.parse(httpQuery("get_class")));
+let classroom = new Classroom(JSON.parse(httpQuery(classuid, "get_class")));
 
 console.log(classroom);
 

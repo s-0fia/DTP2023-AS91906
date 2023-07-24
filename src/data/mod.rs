@@ -3,6 +3,13 @@ pub mod database;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
+pub enum QueryType {
+    ClassUid,
+    GetClasses,
+    GetClass,
+    GetUser,
+    NewClass(String),
+}
 
 // Implement the enumaration of the Permissions of the user which determines what they can do
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
@@ -54,10 +61,24 @@ impl Classroom {
     }
 
     pub fn option_to_response(class: Option<Classroom>) -> Option<ResponseClassroom> {
-        if let Some(class) = class {
-            Some(class.to_response())
-        } else {
-            None
+        class.map(|class| class.to_response())
+    }
+}
+
+impl QueryType {
+    pub fn from_string(query: &str) -> Option<QueryType> {
+        match query {
+            "class_uid" => Some(QueryType::ClassUid),
+            "get_classes" => Some(QueryType::GetClasses),
+            "get_class" => Some(QueryType::GetClass),
+            "get_user" => Some(QueryType::GetUser),
+            _ => {
+                if query.contains("new_class") {
+                    Some(QueryType::NewClass(query[9..].to_string()))
+                } else {
+                    None
+                }
+            },
         }
     }
 }

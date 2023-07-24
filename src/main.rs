@@ -1,6 +1,7 @@
 mod data;
 mod http;
 
+#[allow(unused_imports)]
 use data::{Classroom, database::ExtendFirestoreDb};
 
 use crate::{data::database, http::ip_and_port};

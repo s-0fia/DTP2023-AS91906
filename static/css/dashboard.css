@@ -30,5 +30,19 @@
     padding: 0.5rem;
 }
 
+#new.class-child {
+    color: var(--white);
+    background-image: none;
+    background-color: var(--highlight);
+}
+
+#new.class-child h1 {
+    font-size: 6rem;
+    align-items: center;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+}
+
 /* .class-child h2 {
 } */

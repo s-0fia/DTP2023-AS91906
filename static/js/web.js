@@ -9,6 +9,14 @@ class UserData {
     }
 }
 
+function httpQuery(uid, field)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", `/?uid=${uid}&q=${field}`, false); // false for synchronous request
+    xmlHttp.send(null);
+    return xmlHttp.responseText;
+}
+
 // Given userData, it sets the values in a cookie so that the site can access it later
 function setSignInCookie(userData) {
     // Set the cookie expiry to 6 hours (21600000 milliseconds) from now, which provides easy of use,

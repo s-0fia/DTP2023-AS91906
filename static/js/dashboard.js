@@ -15,14 +15,6 @@ function signOutClick() {
     window.location.href = "./welcome";
 }
 
-function httpQuery(field)
-{
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", `/?uid=${user.id}&q=${field}`, false); // false for synchronous request
-    xmlHttp.send(null);
-    return xmlHttp.responseText;
-}
-
 class Classroom {
     constructor(res) {
         this.UID = res.uid;
@@ -51,7 +43,7 @@ function classClick(classUID) {
 async function loadClasses() {
     let response = classroomInnerToOuterArray(
         JSON.parse(
-            httpQuery("get_classes")
+            httpQuery(user.id, "get_classes")
         )
     );
 

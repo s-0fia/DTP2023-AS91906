@@ -4,7 +4,7 @@ use axum::{
     body,
     extract::{Path, Query},
 };
-use mime_guess::mime::{self, HTML};
+use mime_guess::mime;
 use crate::http::query::*;
 use include_dir::{include_dir, Dir};
 
@@ -13,7 +13,7 @@ static STATIC_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/static");
 static PUBLIC_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/public");
 static CLASS_DIR:  Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/class");
 
-pub async fn class(Path(path): Path<String>) -> impl IntoResponse {
+pub async fn class() -> impl IntoResponse {
     match CLASS_DIR.get_file("index.html") {
         None => panic!("No index.html found in /class!"),
         Some(file) => Response::builder()
@@ -42,6 +42,8 @@ pub async fn static_path(path: Path<String>) -> impl IntoResponse {
 
 // Export for path_handler with the PUBLIC_DIR
 pub async fn public_path(path: Path<String>, query: Option<Query<Req>>) -> impl IntoResponse {
+    dbg!(&path);
+    dbg!(&query);
     // If the request is a query to the DB
     if let Some(response) = get_response(query).await {
         response.into_response()
