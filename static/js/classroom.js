@@ -13,7 +13,7 @@ const titleTag = document.getElementsByTagName('title')[0];
 
 const classuid = window.location.href.split('/c/')[1].replace('/', '');
 
-let classroom = new Classroom(JSON.parse(httpQuery(classuid, "get_class")));
+let classroom = new Classroom(JSON.parse(httpQuery(classuid, "get_class").text));
 
 console.log(classroom);
 

@@ -9,12 +9,19 @@ class UserData {
     }
 }
 
+class Response {
+    constructor(xmlHttp) {
+        this.status = xmlHttp.status;
+        this.text = xmlHttp.responseText;
+    }
+}
+
 function httpQuery(uid, field)
 {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", `/?uid=${uid}&q=${field}`, false); // false for synchronous request
     xmlHttp.send(null);
-    return xmlHttp.responseText;
+    return new Response(xmlHttp);
 }
 
 // Given userData, it sets the values in a cookie so that the site can access it later

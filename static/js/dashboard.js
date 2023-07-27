@@ -40,10 +40,10 @@ function classClick(classUID) {
     }, 500);
 }
 
-async function loadClasses() {
+function loadClasses() {
     let response = classroomInnerToOuterArray(
         JSON.parse(
-            httpQuery(user.id, "get_classes")
+            httpQuery(user.id, "get_classes").text
         )
     );
 

@@ -1,4 +1,4 @@
-use axum::response::IntoResponse;
+use axum::{response::IntoResponse, http::StatusCode};
 use crate::data::{*, database::ExtendFirestoreDb};
 
 pub async fn get(uid: &str) -> impl IntoResponse  {
@@ -53,40 +53,42 @@ pub async fn new(uid: &str, q: String) -> impl IntoResponse {
                 Permissions::Admin => {},
                 Permissions::Teacher => {},
                 _ => {
-                    return "403".into_response();
+                    return StatusCode::FORBIDDEN.into_response();
                 }
             }
+        } else {
+            return StatusCode::BAD_REQUEST.into_response();
         }
 
-        let fields = serde_json::from_str::<[&str; 3]>(&q);
+        let fields = serde_json::from_str::<[&str; 2]>(&q);
         
-        let fields = if fields.is_err() {
-            return "400".into_response();
-        } else {
-            fields.unwrap()
-        };
+        if fields.is_err() {
+            return StatusCode::BAD_REQUEST.into_response();
+        }
 
-        let teachers_uids: Vec<String> = 
-            if let Ok(uids) = serde_json::from_str(fields[2]) {
-                uids
-            } else {
-                vec!()
-            };
+        let fields = fields.unwrap();
 
         let new_class = Classroom {
             uid: Classroom::create_uid(),
             name: fields[0].to_string(),
             users: vec!(),
             teacher_name: fields[1].to_string(),
-            teachers_uids,
+            teachers_uids: vec![uid.to_string()],
         };
 
-        if db.add_class(new_class).await.is_ok() {
-            "200".into_response()
-        } else {
-            "400".into_response()
+        let class_uid = &new_class.uid.clone();
+        
+        if db.add_class_to_user(uid, class_uid).await.is_err() {
+            return StatusCode::INTERNAL_SERVER_ERROR.into_response();
         }
+
+        if db.add_class(new_class).await.is_err() {
+            todo!("Remove class from user");
+            return StatusCode::BAD_REQUEST.into_response();
+        }
+
+        StatusCode::OK.into_response()
     } else {
-        "500".into_response()
+        StatusCode::INTERNAL_SERVER_ERROR.into_response()
     }
 }

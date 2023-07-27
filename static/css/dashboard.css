@@ -46,3 +46,29 @@
 
 /* .class-child h2 {
 } */
+
+#new-class {
+    position: absolute;
+    font-size: large;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: var(--white);
+    display: none;
+    padding: 2rem;
+    font-size: 2rem;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+/* input[name="newclass"]
+{
+    font-size: 2rem;
+} */
+
+#new-class * {
+    font-size: 2rem;
+    text-align: center;
+}
