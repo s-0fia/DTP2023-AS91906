@@ -23,13 +23,18 @@
         }
 
         let user_uid = getSignInCookie().id;
-        let userobj = JSON.parse(httpQuery(user_uid, "get_user"));
+        let res = httpQuery(user_uid, "get_user");
+        if (res.status.toString() == 400) {
+            httpQuery(user_uid, "add_user");
+            res = httpQuery(user_uid, "get_user");
+        }
+        let userobj = JSON.parse(res.text);
         switch (userobj.access) {
             case 'Teacher':
                 window.location.href = '/teachers'
                 break;
             case 'Admin':
-                window.location.href = `/admin/?uid=${user_uid}+q=show`
+                window.location.href = `/teachers`
                 break;
         }
     </script>
@@ -45,7 +50,17 @@
     <button onclick="signOutClick();" id="signOut">Sign out</button>
     <!-- <button onclick="httpQuery('class_uid')">query the server for class uids</button> -->
     <div id="classes">
-        
+        <div id="new" class="class-child" onclick="toggleAddClassScreen();">
+            <h1>+</h1>
+        </div>
+    </div>
+    <div id="new-class">
+        <form>
+            <label for="classid">Class Join Code</label><br>
+            <input type="text" name="joinclass" id="classid" autocomplete="off"><br><br>
+            <button type="submit" onclick="joinClass();">Join</button> 
+            <button type="reset" onclick="toggleAddClassScreen();">Exit</button>
+        </form>
     </div>
 </body>
 </html>

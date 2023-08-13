@@ -1,3 +1,4 @@
+// The classroom class which is equivelant to ResponseClassroom
 class Classroom {
     constructor(res) {
         this.UID = res.uid;
@@ -7,16 +8,30 @@ class Classroom {
     }
 }
 
+// Redirects users back to the dashboard
+function dashboardClick() {
+    showLoader();
+    window.location.href = '/';
+}
+
+// The DOM elements
 const className = document.getElementById("classname");
 const teacherName = document.getElementById("teachername");
+const classCode = document.getElementById("classcode");
 const titleTag = document.getElementsByTagName('title')[0];
 
+// The classuid from the URL
 const classuid = window.location.href.split('/c/')[1].replace('/', '');
 
-let classroom = new Classroom(JSON.parse(httpQuery(classuid, "get_class").text));
+// Construct a classroom from a query
+let classroom = new Classroom(
+    JSON.parse(
+        httpQuery(classuid, "get_class").text
+    )
+);
 
-console.log(classroom);
-
+// Adjust the HTML elements to suit it
 className.innerHTML += classroom.name;
 teacherName.innerHTML += classroom.teacherName;
+classCode.innerHTML += classuid;
 titleTag.innerHTML = `${classroom.name} - ${classroom.teacherName}`;
