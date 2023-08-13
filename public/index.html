@@ -31,6 +31,9 @@
 <body>
     <h1 id="welcomeMessage">Hello, world!</h1>
     <button onclick="signOutClick();" id="signOut">Sign out</button>
-    <button onclick="httpQuery('class_uid')">query the server for class uids</button>
+    <button onclick="getUIDs();">query the server for class uids</button>
+    <p id="p-uids">Class UIDS: </p>
+    <button onclick="getAccess();">query the server for access level</button>
+    <p id="p-access">User Access Level: </p>
 </body>
 </html>

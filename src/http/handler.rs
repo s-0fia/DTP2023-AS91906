@@ -54,6 +54,22 @@ pub async fn public_path(path: Path<String>, query: Option<Query<Req>>) -> impl 
                 let no_classes: Vec<String> = vec!();
                 serde_json::to_string(&no_classes).unwrap().into_response()
             },
+            "get_user" => {
+                // Get the lock on the database to make a query
+                let instance = database::INSTANCE.lock().await;
+
+                if let Some(db) = instance.as_ref() {
+                    // Find the user by the uid and get them.
+                    if let Some(user) = db.find_user_by_id(query.uid.as_ref()).await {
+                        // Return the list of classes to caller based on the user
+                        serde_json::to_string(&user).unwrap().into_response()
+                    } else {
+                        "400".into_response()
+                    }
+                } else {
+                    "500".into_response()
+                }
+            }
             _ => {
                 "404".into_response()
             },
