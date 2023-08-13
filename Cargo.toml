@@ -6,6 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+async-mutex = "1.4.0"
 async-trait = "0.1.68"
 axum = "0.6.12"
 axum-server = "0.5.1"
@@ -16,7 +17,9 @@ gcloud-sdk = "0.20.3"
 http-body-util = "0.1.0-rc.2"
 include_dir = "0.7.3"
 itertools = "0.10.5"
+lazy_static = "1.4.0"
 mime_guess = "2.0.4"
 serde = "1.0.163"
+serde_json = "1.0.104"
 tokio = { version = "1.27.0", features = ["full"] }
 tokio-stream = "0.1.14"

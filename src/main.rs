@@ -1,7 +1,9 @@
 mod data;
 mod http;
 
-use crate::{data::database, http::{ip_and_port}};
+use data::database::INSTANCE;
+
+use crate::{data::database, http::ip_and_port};
 
 // The asynchronous main function
 #[tokio::main]
@@ -10,7 +12,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     dotenv::dotenv().ok();
 
     // Create an instance of the database, and unwrap the result (panic if there is an error)
-    let _db = database::create_firestore_instance().await?;
+    *database::INSTANCE.lock().await = Some(database::create_firestore_instance().await?);
     
     // Get the ip and port defined by the user or default to ip 127.0.0.1 and/or port 80
     let (ip_addr, port) = ip_and_port::get_or_default();

@@ -1,8 +1,15 @@
+use async_mutex::Mutex;
 use async_trait::async_trait;
 use crate::data::*;
 use firestore::{FirestoreDb, errors::FirestoreError, FirestoreDbOptions};
 use gcloud_sdk::{GCP_DEFAULT_SCOPES, TokenSourceType};
+use lazy_static::lazy_static;
 use std::env::var;
+
+// A static reference to the database instance so that it isn't repeatedly passed or reinitialised
+lazy_static! {
+    pub static ref INSTANCE: Mutex<Option<firestore::FirestoreDb>> = Mutex::new(None);
+}
 
 // Trait which extends the FirebaseDb object so that extension methods can be used
 // ie. db.add_user(new_user_info) instead of 

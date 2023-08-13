@@ -31,8 +31,9 @@ pub async fn public_path(path: Path<String>, query: Option<Query<Req>>) -> impl 
             "class_uid" => {
                 // Get the lock on the database to make a query
                 let instance = database::INSTANCE.lock().await;
-
+                dbg!(&instance);
                 if let Some(db) = instance.as_ref() {
+                    dbg!("yeah");
                     // Find the user by the uid and get them.
                     if let Some(user) = db.find_user_by_id(query.uid.as_ref()).await {
                         dbg!(&user.class_uids);
